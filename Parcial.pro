@@ -4,8 +4,8 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
-        Parcial.cpp \
+        FuncionesD1.cpp \
         main.cpp
 
 HEADERS += \
-    Parcial.h
+    FuncionesD1.h
