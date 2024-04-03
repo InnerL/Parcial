@@ -6,13 +6,13 @@ using namespace std;
 int main()
 {
     int seleccion = 0;
-    int *tamanos = nullptr;
+    int* tamanos = nullptr;
     int*** cerradura = nullptr; // Agrega una variable para almacenar la cerradura
     int cantidadEstructuras = 0; // Inicializa la cantidad de estructuras
 
-    while (seleccion != 6){
+    while (seleccion != 7){
         cout << "| Bienvenido al sistema de lockers virtuales de la empresa informa2 |"<< endl;
-        cout << " 1. Crear cerradura\n 2. Rotar partes cerradura\n 3. Cambiar configuracion cerradura\n 4. Validar codigo de cerradura\n 5. Crear cerradura a partir de codigo \n 6. Salir \n| Que desea hacer?: ";
+        cout << " 1. Crear cerradura\n 2. Rotar partes cerradura\n 3. Cambiar configuracion cerradura\n 4. Validar codigo de cerradura\n 5. Crear cerradura a partir de codigo \n 6. Mostrar cerradura\n 7. Salir \n| Que desea hacer?: ";
         cin >> seleccion;
 
         switch (seleccion) {
@@ -27,14 +27,15 @@ int main()
                 cin >> tamanos[i];
             }
 
-            crearCerradura(cerradura, tamanos, cantidadEstructuras);
+            cerradura = crearCerradura(tamanos, cantidadEstructuras);
             break;
 
         case 2:
             // Rotar partes de la cerradura
             int estructuraIndex;
-            cout << "Ingrese el indice de la estructura que desea rotar (de 0 a " << cantidadEstructuras - 1 << "): ";
+            cout << "Ingrese el indice de la estructura que desea rotar (de 1 a " << cantidadEstructuras << "): ";
             cin >> estructuraIndex;
+            estructuraIndex--;
 
             if (estructuraIndex < 0 || estructuraIndex >= cantidadEstructuras) {
                 cout << "Indice de estructura inválido." << endl;
@@ -50,37 +51,44 @@ int main()
                 break;
             }
 
-            rotarCerradura(cerradura, tamanos, estructuraIndex, direccion);
+            cerradura = rotarCerradura (cerradura, tamanos, estructuraIndex, direccion);
             break;
 
         case 3:
             // Cambiar configuración de cerradura
             int opcion;
-            cout << "¿Qué desea hacer?\n";
-            cout << "1. Cambiar tamaño de una estructura en la cerradura\n";
-            cout << "2. Añadir una nueva estructura\n";
-            cout << "3. Eliminar una estructura\n";
-            cout << "Ingrese su opción: ";
+            cout << "Que desea hacer?" << endl;
+            cout << "1. Cambiar tamano de una estructura en la cerradura" << endl;
+            cout << "2. Agregar una nueva estructura" << endl;
+            cout << "3. Eliminar una estructura" << endl;
+            cout << "Ingrese su opcion: ";
             cin >> opcion;
 
             switch (opcion) {
             case 1:
+                // Cambiar tamaño de una estructura en la cerradura
                 int indice;
-                cout << "Ingrese el índice de la estructura que desea cambiar: ";
+                cout << "Ingrese el indice de la estructura que desea cambiar: ";
                 cin >> indice;
                 if (indice < 1 || indice > cantidadEstructuras) {
-                    cout << "Índice inválido.\n";
+                    cout << "Indice invalido.\n";
                     break;
                 }
                 int nuevoTam;
-                cout << "Ingrese el nuevo tamaño para la estructura " << indice << ": ";
+                cout << "Ingrese el nuevo tamano para la estructura " << indice << ": ";
                 cin >> nuevoTam;
                 if (nuevoTam <= 0) {
-                    cout << "Tamaño inválido.\n";
+                    cout << "Tamano invalido.\n";
                     break;
                 }
+
+                // Cambiar tamaño de la estructura
                 tamanos[indice - 1] = nuevoTam;
-                cout << "Tamaño de la estructura " << indice << " actualizado.\n";
+
+                // Copiar valores de la estructura anterior a la nueva estructura
+                cerradura = crearCerradura(tamanos, cantidadEstructuras);
+
+                cout << "Tamanio de la estructura " << indice << " actualizado.\n";
                 break;
             case 2:
 
@@ -91,62 +99,61 @@ int main()
                 for (int i = 0; i < cantidadEstructuras - 1; ++i) {
                     nuevosTamanos[i] = tamanos[i];
                 }
-                cout << "Ingrese el tamaño de la nueva estructura: ";
+                cout << "Ingrese el tamano de la nueva estructura: ";
                 cin >> nuevosTamanos[cantidadEstructuras - 1];
                 delete[] tamanos;
                 tamanos = nuevosTamanos;
-                crearCerradura(cerradura, tamanos, cantidadEstructuras);
+                cerradura = crearCerradura(tamanos, cantidadEstructuras);
                 cout << "Nueva estructura agregada.\n";
                 break;
             case 3:
                 // Eliminar estructura
                 if (cantidadEstructuras == 1) {
-                    cout << "No se puede eliminar la última estructura.\n";
+                    cout << "No se puede eliminar la ultima estructura.\n";
                     break;
                 }
                 int indiceEliminar;
-                cout << "Ingrese el índice de la estructura que desea eliminar: ";
+                cout << "Ingrese el indice de la estructura que desea eliminar: ";
                 cin >> indiceEliminar;
                 if (indiceEliminar < 1 || indiceEliminar > cantidadEstructuras) {
-                    cout << "Índice inválido.\n";
+                    cout << "Indice invalido.\n";
                     break;
                 }
                 for (int i = indiceEliminar - 1; i < cantidadEstructuras - 1; ++i) {
                     tamanos[i] = tamanos[i + 1];
                 }
                 cantidadEstructuras--;
-                crearCerradura(cerradura, tamanos, cantidadEstructuras);
+                cerradura = crearCerradura(tamanos, cantidadEstructuras);
                 cout << "Estructura eliminada.\n";
                 break;
             default:
-                cout << "Opción inválida.\n";
+                cout << "Opción invalida.\n";
                 break;
             }
             break;
 
         case 4:
-
+            if (validarCodigoCerradura(cerradura, tamanos, cantidadEstructuras)) {
+                cout << "El código de cerradura es válido." << endl;
+            } else {
+                cout << "El código de cerradura no es válido." << endl;
+            }
             break;
 
         case 5:
 
             break;
 
+        case 6:
+
+            mostrarCerradura(cerradura, tamanos, cantidadEstructuras);
+
+            break;
         default:
+
             break;
         }
 
     }
-
-    // Liberar la memoria asignada
-    delete[] tamanos;
-    for (int i = 0; i < cantidadEstructuras; ++i) {
-        for (int j = 0; j < tamanos[i]; ++j) {
-            delete[] cerradura[i][j];
-        }
-        delete[] cerradura[i];
-    }
-    delete[] cerradura;
-
     return 0;
 }
