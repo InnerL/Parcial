@@ -3,8 +3,8 @@
 
 using namespace std;
 
-void crearCerradura(int*** &cerradura, int* tamanos, int cantidadEstructuras) {
-    cerradura = new int**[cantidadEstructuras];
+int*** crearCerradura(int* tamanos, int cantidadEstructuras) {
+    int*** cerradura = new int**[cantidadEstructuras];
     for (int i = 0; i < cantidadEstructuras; ++i) {
         cerradura[i] = new int*[tamanos[i]];
         int contador = 1;
@@ -12,7 +12,7 @@ void crearCerradura(int*** &cerradura, int* tamanos, int cantidadEstructuras) {
             cerradura[i][j] = new int[tamanos[i]];
             for (int k = 0; k < tamanos[i]; ++k){
                 if (j == tamanos[i]/2 && k == tamanos[i]/2){
-                    cout << " ";
+                    cout << "  ";
                 }
                 else {
                     cerradura[i][j][k] = contador++;
@@ -20,7 +20,10 @@ void crearCerradura(int*** &cerradura, int* tamanos, int cantidadEstructuras) {
             }
         }
     }
-    // Imprimir la configuración de la cerradura
+    return cerradura;
+}
+
+void mostrarCerradura(int*** &cerradura, int* tamanos, int cantidadEstructuras){
     cout << "Se creo la cerradura con las siguientes estructuras:" << endl;
     for (int i = 0; i < cantidadEstructuras; ++i) {
         cout << "Estructura " << i+1 << ":" << endl;
@@ -38,22 +41,21 @@ void crearCerradura(int*** &cerradura, int* tamanos, int cantidadEstructuras) {
     }
 }
 
-void rotarCerradura(int*** &cerradura, int* tamanos, int estructuraIndex, int direccion) {
+int ***rotarCerradura(int*** &cerradura, int* tamanos, int estructuraIndex, int direccion) {
     int size = tamanos[estructuraIndex];
     int** temp = new int*[size];
 
-    // Rotar la matriz de la estructura seleccionada
     for (int i = 0; i < size; ++i) {
         temp[i] = new int[size];
         for (int j = 0; j < size; ++j) {
             switch (direccion) {
-            case 0:  // Rotar 90 grados a la derecha
+            case 0:
                 temp[i][j] = cerradura[estructuraIndex][size - 1 - j][i];
                 break;
-            case 1:  // Rotar 180 grados a la derecha
+            case 1:
                 temp[i][j] = cerradura[estructuraIndex][size - 1 - i][size - 1 - j];
                 break;
-            case 2:  // Rotar 270 grados a la derecha
+            case 2:
                 temp[i][j] = cerradura[estructuraIndex][j][size - 1 - i];
                 break;
             default:
@@ -62,19 +64,54 @@ void rotarCerradura(int*** &cerradura, int* tamanos, int estructuraIndex, int di
         }
     }
 
-    // Actualizar la matriz de la estructura con la rotación
     for (int i = 0; i < size; ++i) {
         for (int j = 0; j < size; ++j) {
             cerradura[estructuraIndex][i][j] = temp[i][j];
         }
     }
 
-    // Liberar memoria
     for (int i = 0; i < size; ++i) {
         delete[] temp[i];
     }
     delete[] temp;
 
-    // Mensaje de confirmación
-    cout << "La estructura " << estructuraIndex + 1 << " ha sido rotada " << (direccion + 1) * 90 << " grados." << endl;
+    return cerradura;
+}
+
+bool validarCodigoCerradura(int*** cerradura, int* tamanos, int cantidadEstructuras) {
+    int columna, fila;
+    cout << "Ingrese las coordenadas (columna y fila) para validar el codigo de cerradura: ";
+    cin >> columna >> fila;
+    columna--;
+    fila--;
+
+    if (columna < 0 || columna >= tamanos[0] || fila < 0 || fila >= tamanos[0]) {
+        cout << "Coordenadas fuera de rango." << endl;
+        return false;
+    }
+
+    for (int i = 0; i < cantidadEstructuras - 1; ++i) {
+        int valor;
+        cout << "Ingrese el valor para la estructura " << i + 1 << " (-1 para menor, 1 para mayor): ";
+        cin >> valor;
+
+        if (valor != -1 && valor != 1) {
+            cout << "Valor invalido." << endl;
+            return false;
+        }
+
+        int actual = cerradura[i][fila][columna];
+        int siguiente = cerradura[i + 1][fila][columna];
+
+        if (valor == -1 && siguiente >= actual) {
+            cout << "Error en la secuencia de valores." << endl;
+            return false;
+        } else if (valor == 1 && siguiente <= actual) {
+            cout << "Error en la secuencia de valores." << endl;
+            return false;
+        }
+    }
+
+    cout << "Codigo de cerradura válido." << endl;
+    return true;
 }
