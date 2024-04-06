@@ -80,9 +80,8 @@ int main()
                     break;
                 }
 
+                cerradura[indice - 1] = cambiarTamanioEstructura(cerradura[indice - 1], tamanos[indice - 1], nuevoTam);
                 tamanos[indice - 1] = nuevoTam;
-
-                cerradura = crearCerradura(tamanos, cantidadEstructuras);
 
                 cout << "Tamanio de la estructura " << indice << " actualizado.\n";
                 break;
@@ -136,7 +135,6 @@ int main()
 
         case 5:
         {
-            rotaciones = new int[cantidadEstructuras];
             cout << "Creacion de cerradura a partir de la regla K" << endl;
 
             cout << "Ingrese la cantidad de matrices en la cerradura: ";
@@ -164,7 +162,7 @@ int main()
             }
 
             for (int i = 0; i < cantidadEstructuras - 1; ++i) {
-                int valor;
+                short int valor;
                 cout << "Ingrese el valor para la estructura " << i + 1 << " (-1 para menor, 1 para mayor): ";
                 cin >> valor;
 
@@ -173,11 +171,12 @@ int main()
                     break;
                 }
                 int rotationCount = 0;
-                while (true) {
-                    int temp1 = cerradura[i][fila][columna];
-                    int temp2 = cerradura[i + 1][fila][columna];
 
-                    if ((valor == 1 && temp1 < temp2) || (valor == -1 && temp1 > temp2)) {
+                while (true) {
+                    int numero1 = cerradura[i][fila][columna];
+                    int numero2 = cerradura[i + 1][fila][columna];
+
+                    if ((valor == 1 && numero1 > numero2) || (valor == -1 && numero1 < numero2)) {
                         break;
                     }
 
@@ -185,25 +184,17 @@ int main()
                     rotationCount++;
 
                     if (rotationCount >= 4) {
-                        rotationCount = 0;
+                        cerradura[i] = cambiarTamanioEstructura(cerradura[i], tamanos[i], tamanos[i]+2);
                         tamanos[i]+=2;
-                        tamanos[i + 1]+=2;
-                        cerradura = crearCerradura(tamanos, cantidadEstructuras);
-
+                        rotationCount = 0;
                     }
-                    cout << temp1 << "  " << temp2 << endl;
-                }
-                rotaciones[i] = rotationCount;
-            }
-            for (int i = 0; i < cantidadEstructuras - 1; ++i){
-                for (int p = 0; p < rotaciones[i]; ++p) {
-                    cerradura = rotarCerradura(cerradura, tamanos, i+1, 0);
                 }
             }
 
             mostrarCerradura(cerradura, tamanos, cantidadEstructuras);
         }
         break;
+
 
 
         case 6:

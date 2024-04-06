@@ -41,6 +41,34 @@ void mostrarCerradura(int*** &cerradura, int* tamanos, int cantidadEstructuras){
     }
 }
 
+int** cambiarTamanioEstructura(int**& estructura, int dimensionAnterior, int nuevaDimension) {
+    int** nuevaEstructura = new int*[nuevaDimension];
+    for (int i = 0; i < nuevaDimension; ++i) {
+        nuevaEstructura[i] = new int[nuevaDimension];
+    }
+
+    int contador = 1;
+    for (int i = 0; i < nuevaDimension; ++i) {
+        for (int j = 0; j < nuevaDimension; ++j) {
+            if (i == nuevaDimension / 2 && j == nuevaDimension / 2) {
+                cout << "   ";
+            } else {
+                nuevaEstructura[i][j] = contador++;
+            }
+        }
+    }
+
+    for (int i = 0; i < dimensionAnterior; ++i) {
+        delete[] estructura[i];
+    }
+    delete[] estructura;
+
+    estructura = nuevaEstructura;
+
+    return estructura;
+}
+
+
 int ***rotarCerradura(int*** &cerradura, int* tamanos, int estructuraIndex, int direccion) {
     int size = tamanos[estructuraIndex];
     int** temp = new int*[size];
