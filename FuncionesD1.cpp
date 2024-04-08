@@ -12,7 +12,7 @@ int*** crearCerradura(int* tamanos, int cantidadEstructuras) {
             cerradura[i][j] = new int[tamanos[i]];
             for (int k = 0; k < tamanos[i]; ++k){
                 if (j == tamanos[i]/2 && k == tamanos[i]/2){
-                    cout << "  ";
+                    cerradura[i][j][k] = 0;
                 }
                 else {
                     cerradura[i][j][k] = contador++;
