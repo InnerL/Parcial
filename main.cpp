@@ -7,7 +7,6 @@ int main()
 {
     int seleccion = 0;
     int* tamanos = nullptr;
-    int* rotaciones = nullptr;
     int*** cerradura = nullptr;
     int cantidadEstructuras = 0;
 
@@ -126,11 +125,7 @@ int main()
             break;
 
         case 4:
-            if (validarCodigoCerradura(cerradura, tamanos, cantidadEstructuras)) {
-                cout << "El codigo de cerradura es valido." << endl;
-            } else {
-                cout << "El codigo de cerradura no es valido." << endl;
-            }
+            validarCodigoCerradura(cerradura, tamanos, cantidadEstructuras);
             break;
 
         case 5:
@@ -161,37 +156,106 @@ int main()
                 }
             }
 
+            int numero1, numero2;
+
+            bool esPosible = true;
             for (int i = 0; i < cantidadEstructuras - 1; ++i) {
                 short int valor;
-                cout << "Ingrese el valor para la estructura " << i + 1 << " (-1 para menor, 1 para mayor): ";
+                cout << "Ingrese el valor para la estructura " << i + 1 << " (-1 para menor, 1 para mayor, 0 para igual): ";
                 cin >> valor;
 
-                if (valor != -1 && valor != 1) {
+                if (valor != -1 && valor != 1 && valor != 0) {
                     cout << "Valor inválido." << endl;
                     break;
                 }
                 int rotationCount = 0;
 
-                while (true) {
-                    int numero1 = cerradura[i][fila][columna];
-                    int numero2 = cerradura[i + 1][fila][columna];
 
-                    if ((valor == 1 && numero1 > numero2) || (valor == -1 && numero1 < numero2)) {
-                        break;
+
+
+                switch (valor) {
+                case -1:
+                {
+                    while (true){
+
+                        numero1 = cerradura[i][fila][columna];
+                        numero2 = cerradura[i + 1][fila][columna];
+
+                        if (!esPosible) break;
+
+                        if (valor == -1 && numero1 < numero2) break;
+                        cerradura = rotarCerradura(cerradura, tamanos, i+1, 0);
+                        rotationCount++;
+
+                        if (rotationCount > 4) {
+                            cerradura[i+1] = cambiarTamanioEstructura(cerradura[i+1], tamanos[i+1], tamanos[i+1]+2);
+                            tamanos[i+1]+=2;
+                            rotationCount = 0;
+                        }
+
                     }
-
-                    cerradura = rotarCerradura(cerradura, tamanos, i+1, 0);
-                    rotationCount++;
-
-                    if (rotationCount >= 4) {
-                        cerradura[i] = cambiarTamanioEstructura(cerradura[i], tamanos[i], tamanos[i]+2);
-                        tamanos[i]+=2;
-                        rotationCount = 0;
-                    }
+                    break;
                 }
+
+                case 0:
+                {
+                    while (true){
+
+                        numero1 = cerradura[i][fila][columna];
+                        numero2 = cerradura[i + 1][fila][columna];
+
+                        if (valor == 0 && numero1 == numero2) break;
+                        cerradura = rotarCerradura(cerradura, tamanos, i+1, 0);
+                        rotationCount++;
+
+                        if (rotationCount > 4) {
+                            cerradura[i+1] = cambiarTamanioEstructura(cerradura[i+1], tamanos[i+1], tamanos[i]);
+                            tamanos[i+1]= tamanos[i];
+                            rotationCount = 0;
+                        }
+
+                    }
+                    break;
+                }
+                case 1:
+                {
+                    while (true){
+
+                        numero1 = cerradura[i][fila][columna];
+                        numero2 = cerradura[i + 1][fila][columna];
+
+                        if (valor == 1 && numero1 > numero2) break;
+                        cerradura = rotarCerradura(cerradura, tamanos, i+1, 0);
+                        rotationCount++;
+
+                        if (rotationCount > 4) {
+                            if ((tamanos[i+1]==3) || (tamanos[i+1]-2 <= columna)|| (tamanos[i+1]-2 <= fila)) {
+                                esPosible = false;
+                                break;
+                            }
+                            cerradura[i+1] = cambiarTamanioEstructura(cerradura[i+1], tamanos[i+1], tamanos[i+1]-2);
+                            tamanos[i+1]-=2;
+                            rotationCount = 0;
+                        }
+
+                    }
+                    break;
+                }
+                default:
+                {
+                    cout << "valor invalido";
+                }
+                break;
+                }
+
             }
 
-            mostrarCerradura(cerradura, tamanos, cantidadEstructuras);
+            if (esPosible){
+                mostrarCerradura(cerradura, tamanos, cantidadEstructuras);
+            }
+            else {
+                cout << "Config invalida" << endl;
+            }
         }
         break;
 

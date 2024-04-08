@@ -23,50 +23,6 @@ int*** crearCerradura(int* tamanos, int cantidadEstructuras) {
     return cerradura;
 }
 
-void mostrarCerradura(int*** &cerradura, int* tamanos, int cantidadEstructuras){
-    cout << "Se creo la cerradura con las siguientes estructuras:" << endl;
-    for (int i = 0; i < cantidadEstructuras; ++i) {
-        cout << "Estructura " << i+1 << ":" << endl;
-        for (int j = 0; j < tamanos[i]; ++j) {
-            for (int k = 0; k < tamanos[i]; ++k) {
-                if (j == tamanos[i]/2 && k == tamanos[i]/2){
-                    cout << "   ";
-                }
-                else {
-                    cout << cerradura[i][j][k] << " ";
-                }
-            }
-            cout << endl;
-        }
-    }
-}
-
-int** cambiarTamanioEstructura(int**& estructura, int dimensionAnterior, int nuevaDimension) {
-    int** nuevaEstructura = new int*[nuevaDimension];
-    for (int i = 0; i < nuevaDimension; ++i) {
-        nuevaEstructura[i] = new int[nuevaDimension];
-    }
-
-    int contador = 1;
-    for (int i = 0; i < nuevaDimension; ++i) {
-        for (int j = 0; j < nuevaDimension; ++j) {
-            if (i == nuevaDimension / 2 && j == nuevaDimension / 2) {
-                cout << "   ";
-            } else {
-                nuevaEstructura[i][j] = contador++;
-            }
-        }
-    }
-
-    for (int i = 0; i < dimensionAnterior; ++i) {
-        delete[] estructura[i];
-    }
-    delete[] estructura;
-
-    estructura = nuevaEstructura;
-
-    return estructura;
-}
 
 
 int ***rotarCerradura(int*** &cerradura, int* tamanos, int estructuraIndex, int direccion) {
@@ -106,6 +62,33 @@ int ***rotarCerradura(int*** &cerradura, int* tamanos, int estructuraIndex, int 
     return cerradura;
 }
 
+int** cambiarTamanioEstructura(int**& estructura, int dimensionAnterior, int nuevaDimension) {
+    int** nuevaEstructura = new int*[nuevaDimension];
+    for (int i = 0; i < nuevaDimension; ++i) {
+        nuevaEstructura[i] = new int[nuevaDimension];
+    }
+
+    int contador = 1;
+    for (int i = 0; i < nuevaDimension; ++i) {
+        for (int j = 0; j < nuevaDimension; ++j) {
+            if (i == nuevaDimension / 2 && j == nuevaDimension / 2) {
+                cout << "   ";
+            } else {
+                nuevaEstructura[i][j] = contador++;
+            }
+        }
+    }
+
+    for (int i = 0; i < dimensionAnterior; ++i) {
+        delete[] estructura[i];
+    }
+    delete[] estructura;
+
+    estructura = nuevaEstructura;
+
+    return estructura;
+}
+
 bool validarCodigoCerradura(int*** cerradura, int* tamanos, int cantidadEstructuras) {
     int columna, fila;
     cout << "Ingrese las coordenadas (columna y fila) para validar el codigo de cerradura: ";
@@ -142,4 +125,22 @@ bool validarCodigoCerradura(int*** cerradura, int* tamanos, int cantidadEstructu
 
     cout << "Codigo de cerradura válido." << endl;
     return true;
+}
+
+void mostrarCerradura(int*** &cerradura, int* tamanos, int cantidadEstructuras){
+    cout << "Se creo la cerradura con las siguientes estructuras:" << endl;
+    for (int i = 0; i < cantidadEstructuras; ++i) {
+        cout << "Estructura " << i+1 << ":" << endl;
+        for (int j = 0; j < tamanos[i]; ++j) {
+            for (int k = 0; k < tamanos[i]; ++k) {
+                if (j == tamanos[i]/2 && k == tamanos[i]/2){
+                    cout << "   ";
+                }
+                else {
+                    cout << cerradura[i][j][k] << " ";
+                }
+            }
+            cout << endl;
+        }
+    }
 }
