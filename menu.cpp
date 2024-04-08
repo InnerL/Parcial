@@ -35,12 +35,12 @@ void menuPrin(int& seleccion){
 
 void case1(int& cantidadEstructuras, int*& tamanos, int***& cerradura){
     cout << "Ingrese la cantidad de estructuras de la cerradura: ";
-    cin >> cantidadEstructuras;
+    cantidadEstructuras = validarNumero();
 
     tamanos = new int[cantidadEstructuras];
-    cout << "Ingrese los tamanos de las estructuras separados por espacios: ";
     for (int i = 0; i < cantidadEstructuras; ++i) {
-        cin >> tamanos[i];
+        cout << "Ingrese el tamano de la estructura " << i+1 << ": ";
+        tamanos[i] = validarNumeroImpar();
     }
     cerradura = crearCerradura(tamanos, cantidadEstructuras);
 }
@@ -50,7 +50,7 @@ void case2(int& cantidadEstructuras, int***& cerradura, int*& tamanos){
     int direccion;
 
     cout << "Ingrese el indice de la estructura que desea rotar (de 1 a " << cantidadEstructuras << "): ";
-    cin >> estructuraIndex;
+    estructuraIndex = validarNumero();
     estructuraIndex--;
 
     if (estructuraIndex < 0 || estructuraIndex >= cantidadEstructuras) {
@@ -58,7 +58,7 @@ void case2(int& cantidadEstructuras, int***& cerradura, int*& tamanos){
         return;
     }
     cout << "Ingrese la direccion de rotacion (0: 90 grados a la derecha, 1: 180 grados a la derecha, 2: 270 grados a la derecha): ";
-    cin >> direccion;
+    direccion = validarNumero();
 
     if (direccion < 0 || direccion > 2) {
         cout << "Direccion de rotacion invalido." << endl;
@@ -74,7 +74,7 @@ void case3(int& cantidadEstructuras, int***& cerradura, int*& tamanos){
     cout << "2. Agregar una nueva estructura" << endl;
     cout << "3. Eliminar una estructura" << endl;
     cout << "Ingrese su opcion: ";
-    cin >> opcion;
+    opcion = validarNumero();
 
     switch (opcion) {
     case 1:
@@ -95,8 +95,11 @@ void case3(int& cantidadEstructuras, int***& cerradura, int*& tamanos){
 
 bool case4(int*** cerradura, int* tamanos, int cantidadEstructuras) {
     int columna, fila;
-    cout << "Ingrese las coordenadas (columna y fila) para validar el codigo de cerradura: ";
-    cin >> columna >> fila;
+    cout << "Ingrese las coordenadas (columna y fila) para validar el codigo de cerradura: " << endl;
+    cout << "Columna: ";
+    columna = validarNumero();
+    cout << " Fila: ";
+    fila = validarNumero();
     columna--;
     fila--;
 
@@ -108,7 +111,7 @@ bool case4(int*** cerradura, int* tamanos, int cantidadEstructuras) {
     for (int i = 0; i < cantidadEstructuras - 1; ++i) {
         int valor;
         cout << "Ingrese el valor para la estructura " << i + 1 << " (-1 para menor, 1 para mayor): ";
-        cin >> valor;
+        valor = validarNumero();
 
         if (valor != -1 && valor != 1) {
             cout << "Valor invalido." << endl;
@@ -136,7 +139,7 @@ void case5(int*& tamanos ,int***& cerradura, int& cantidadEstructuras){
         cout << "Creacion de cerradura a partir de la regla K" << endl;
 
         cout << "Ingrese la cantidad de matrices en la cerradura: ";
-        cin >> cantidadEstructuras;
+        cantidadEstructuras = validarNumero();
 
         int tamañoInicial = 3;
 
@@ -147,13 +150,16 @@ void case5(int*& tamanos ,int***& cerradura, int& cantidadEstructuras){
         cerradura = crearCerradura(tamanos, cantidadEstructuras);
 
         int columna, fila;
-        cout << "Ingrese las coordenadas (columna y fila) para la primera matriz separadas por un espacio: ";
-        cin >> columna >> fila;
+        cout << "Ingrese las coordenadas (columna y fila) para validar el codigo de cerradura: " << endl;
+        cout << "Columna: ";
+        columna = validarNumero();
+        cout << " Fila: ";
+        fila = validarNumero();
         columna--;
         fila--;
 
         for (int i = 0; i < cantidadEstructuras; ++i) {
-            while (columna >= tamanos[i] || fila >= tamanos[i]) {
+            while (columna >= tamanos[i] || fila >= tamanos[i] || (cerradura[i][fila][columna] == 0)) {
                 tamanos[i] += 2;
                 cerradura = crearCerradura(tamanos, cantidadEstructuras);
             }

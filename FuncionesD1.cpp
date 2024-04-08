@@ -3,8 +3,6 @@
 
 using namespace std;
 
-
-
 int*** crearCerradura(int* tamanos, int cantidadEstructuras) {
     int*** cerradura = new int**[cantidadEstructuras];
     for (int i = 0; i < cantidadEstructuras; ++i) {
@@ -110,14 +108,14 @@ void mostrarCerradura(int*** &cerradura, int* tamanos, int cantidadEstructuras){
 void changeStructC3(int& cantidadEstructuras, int***& cerradura, int*& tamanos){
     int indice;
     cout << "Ingrese el indice de la estructura que desea cambiar: ";
-    cin >> indice;
+    indice = validarNumero();
     if (indice < 1 || indice > cantidadEstructuras) {
         cout << "Indice invalido.\n";
         return;
     }
     int nuevoTam;
     cout << "Ingrese el nuevo tamano para la estructura " << indice << ": ";
-    cin >> nuevoTam;
+    nuevoTam = validarNumeroImpar();
     if (nuevoTam <= 0) {
         cout << "Tamano invalido.\n";
         return;
@@ -137,7 +135,7 @@ void aggStructC3(int& cantidadEstructuras, int***& cerradura, int*& tamanos){
         nuevosTamanos[i] = tamanos[i];
     }
     cout << "Ingrese el tamano de la nueva estructura: ";
-    cin >> nuevosTamanos[cantidadEstructuras - 1];
+    nuevosTamanos[cantidadEstructuras - 1] = validarNumeroImpar();
     delete[] tamanos;
     tamanos = nuevosTamanos;
     cerradura = crearCerradura(tamanos, cantidadEstructuras);
@@ -151,7 +149,7 @@ void deletStructC3(int& cantidadEstructuras, int***& cerradura, int*& tamanos){
     }
     int indiceEliminar;
     cout << "Ingrese el indice de la estructura que desea eliminar: ";
-    cin >> indiceEliminar;
+    indiceEliminar = validarNumero();
     if (indiceEliminar < 1 || indiceEliminar > cantidadEstructuras) {
         cout << "Indice invalido.\n";
         return;
@@ -170,7 +168,7 @@ void compareStruct(int*& tamanos ,int***& cerradura, int& cantidadEstructuras, i
     for (int i = 0; i < cantidadEstructuras - 1; ++i) {
         short int valor;
         cout << "Ingrese el valor para la estructura " << i + 1 << " (-1 para menor, 1 para mayor, 0 para igual): ";
-        cin >> valor;
+        valor = validarNumero();
 
         if (valor != -1 && valor != 1 && valor != 0) {
             cout << "Valor inválido." << endl;
@@ -272,4 +270,42 @@ void positive(int*& tamanos, int***& cerradura, int& numero1, int& numero2, int 
         }
 
     }
+}
+
+int validarNumeroImpar() {
+    int numero;
+    bool esNumero = false;
+
+    while (!esNumero) {
+        cin >> numero;
+
+        if (cin.good() && (numero % 2 == 1)) {
+            esNumero = true;
+        } else {
+            cout << "Entrada invalida. Por favor ingrese un numero impar: ";
+            cin.clear();
+            cin.ignore();
+        }
+    }
+
+    return numero;
+}
+
+int validarNumero() {
+    int numero;
+    bool esNumero = false;
+
+    while (!esNumero) {
+        cin >> numero;
+
+        if (cin.good()) {
+            esNumero = true;
+        } else {
+            cout << "Entrada invalida. Por favor ingrese un numero: " << endl;
+            cin.clear();
+            cin.ignore();
+        }
+    }
+
+    return numero;
 }
