@@ -5,7 +5,9 @@ CONFIG -= qt
 
 SOURCES += \
         FuncionesD1.cpp \
-        main.cpp
+        main.cpp \
+        menu.cpp
 
 HEADERS += \
-    FuncionesD1.h
+    FuncionesD1.h \
+    menu.h
