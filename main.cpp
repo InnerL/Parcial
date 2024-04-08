@@ -150,7 +150,7 @@ int main()
             fila--;
 
             for (int i = 0; i < cantidadEstructuras; ++i) {
-                while (columna >= tamanos[i] || fila >= tamanos[i]) {
+                while (columna >= tamanos[i] || fila >= tamanos[i] || cerradura[i][j][k] == 0) {
                     tamanos[i] += 2;
                     cerradura = crearCerradura(tamanos, cantidadEstructuras);
                 }
