@@ -110,10 +110,10 @@ bool case4(int*** cerradura, int* tamanos, int cantidadEstructuras) {
 
     for (int i = 0; i < cantidadEstructuras - 1; ++i) {
         int valor;
-        cout << "Ingrese el valor para la estructura " << i + 1 << " (-1 para menor, 1 para mayor): ";
+        cout << "Ingrese el valor para la estructura " << i + 1 << " (-1 para menor, 1 para mayor, 0 para igual): ";
         valor = validarNumero();
 
-        if (valor != -1 && valor != 1) {
+        if (valor != -1 && valor != 1 && valor != 0) {
             cout << "Valor invalido." << endl;
             return false;
         }
@@ -125,6 +125,9 @@ bool case4(int*** cerradura, int* tamanos, int cantidadEstructuras) {
             cout << "Error en la secuencia de valores." << endl;
             return false;
         } else if (valor == 1 && siguiente <= actual) {
+            cout << "Error en la secuencia de valores." << endl;
+            return false;
+        } else if (valor == 0 && siguiente != actual){
             cout << "Error en la secuencia de valores." << endl;
             return false;
         }
